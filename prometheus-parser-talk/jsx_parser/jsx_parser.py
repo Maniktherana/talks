@@ -8,7 +8,7 @@ class JSXParser:
 
     def parse(self, data):
         self.lexer.input(data)
-        self.advance()  # Get first token
+        self.advance()
         return self.parse_element()
 
     def advance(self):
@@ -30,19 +30,16 @@ class JSXParser:
         if not self.current_token:
             return None
 
-        # Handle text content
         if self.current_token.type == "TEXT":
             node = {"type": "Text", "content": self.current_token.value}
             self.advance()
             return node
 
-        # Handle opening tag or self-closing tag
         if self.current_token.type == "TAGSTART":
             self.advance()
             tag_name = self.expect("IDENTIFIER").value
             attributes = self.parse_attributes()
 
-            # Handle self-closing tag
             if self.current_token.type == "SELFCLOSING":
                 self.advance()
                 return {
@@ -52,11 +49,9 @@ class JSXParser:
                     "children": [],
                 }
 
-            # Handle regular tag
             self.expect("TAGEND")
             children = self.parse_children()
 
-            # Handle closing tag
             self.expect("CLOSETAG")
             closing_tag = self.expect("IDENTIFIER").value
             if closing_tag != tag_name:

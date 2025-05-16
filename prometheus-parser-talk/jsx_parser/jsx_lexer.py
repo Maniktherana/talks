@@ -46,7 +46,7 @@ class JSXLexer:
 
     def t_INITIAL_STRING(self, t):
         r'"[^"]*"|\'[^\']*\''
-        t.value = t.value[1:-1]  # Remove quotes
+        t.value = t.value[1:-1]
         return t
 
     def t_INITIAL_IDENTIFIER(self, t):
@@ -56,7 +56,7 @@ class JSXLexer:
     def t_text_TEXT(self, t):
         r"[^<]+"
         t.value = t.value.strip()
-        if t.value:  # Only return if there's non-whitespace content
+        if t.value:
             return t
 
     def t_text_CLOSETAG(self, t):
@@ -77,12 +77,10 @@ class JSXLexer:
         r"[ \t\n]+"
         pass
 
-    # Define a rule so we can track line numbers
     def t_newline(self, t):
         r"\n+"
         t.lexer.lineno += len(t.value)
 
-    # A string containing ignored characters (spaces and tabs)
     t_ignore = " \t"
 
     def t_error(self, t):

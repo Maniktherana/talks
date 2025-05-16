@@ -19,14 +19,11 @@ class JSXFormatter:
         """Format a JSX AST node with proper indentation and spacing."""
         indent = " " * (level * self.indent_size)
 
-        # Handle text-only nodes
         if node.text is not None and not node.children:
             return f"{indent}{node.text.strip()}"
 
-        # Start building the opening tag
         result = [f"{indent}<{node.tag}"]
 
-        # Add formatted attributes
         if node.attributes:
             attrs = []
             for key, value in sorted(node.attributes.items()):
@@ -34,13 +31,11 @@ class JSXFormatter:
             result.append(" " + " ".join(attrs))
 
         if not node.children and not node.text:
-            # Self-closing tag
             result.append(" />")
             return "".join(result)
 
         result.append(">")
 
-        # Handle children
         if node.children:
             result.append("\n")
             for child in node.children:
@@ -48,10 +43,8 @@ class JSXFormatter:
                 result.append("\n")
             result.append(indent)
         elif node.text:
-            # Handle text content
             result.append(node.text.strip())
 
-        # Add closing tag
         result.append(f"</{node.tag}>")
 
         return "".join(result)
@@ -60,13 +53,6 @@ class JSXFormatter:
 def format_jsx(ast: JSXNode, indent_size: int = 4) -> str:
     """
     Format JSX AST with consistent spacing and indentation.
-
-    Args:
-        ast: The JSX AST to format
-        indent_size: Number of spaces to use for each indentation level
-
-    Returns:
-        A formatted string representation of the JSX
     """
     formatter = JSXFormatter(indent_size=indent_size)
     return formatter.format(ast)
@@ -87,7 +73,7 @@ def convert_ast(parser_ast):
             children=children,
             text=None,
         )
-    else:  # Text node
+    else:
         return JSXNode(tag="", attributes={}, children=[], text=parser_ast["content"])
 
 
@@ -96,13 +82,10 @@ def main():
     parser = JSXParser()
 
     raw_examples = [
-
         """<div>  Hello    World  </div>""",
-
         """<button type = "submit"disabled="true"    className  =  "btn-primary">
             Click   Me
         </button>""",
-
         """<div className="container"><header>
         <h1 className="title">Welcome</h1><nav><ul>
         <li>Home</li><li>About</li>
