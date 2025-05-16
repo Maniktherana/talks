@@ -17,7 +17,7 @@ class JSXLexer:
     t_INITIAL_ignore = " \t\n"
     t_text_ignore = " \t\n"
 
-    states = (("text", "exclusive"),)
+    states = (("text", "exclusive"),) # Ignore rules from INITIAL when in text state
 
     # Tokens
     def t_ANY_error(self, t):
